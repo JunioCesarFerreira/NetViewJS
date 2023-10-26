@@ -2,7 +2,7 @@
 
 **NetViewJS** é uma aplicação React para visualização de grafos a partir de arquivos JSON.
 
-![NetViewJS Screenshot](https://github.com/JunioCesarFerreira/NetViewJS/tree/main/images/print.png)
+![NetViewJS Screenshot](https://github.com/JunioCesarFerreira/NetViewJS/blob/main/images/print.png)
 
 ## Características
 
