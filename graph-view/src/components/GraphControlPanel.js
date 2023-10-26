@@ -1,10 +1,30 @@
 import React from 'react';
 
-const GraphControlPanel = ({ onParamChange, visualParams, maxWeight }) => {
+const GraphControlPanel = ({ onParamChange, visualParams }) => {
     return (
       <div className="control-panel">
         <table>
           <tbody>
+            
+            <tr>
+              <td>Show Node Labels:</td>
+              <td>
+                <input 
+                  type="checkbox"
+                  checked={visualParams.showNodeLabels}
+                  onChange={(e) => onParamChange("showNodeLabels", e.target.checked)}
+                />
+              </td>
+              <td>Show Link Labels:</td>
+              <td>
+                <input 
+                  type="checkbox"
+                  checked={visualParams.showLinkLabels}
+                  onChange={(e) => onParamChange("showLinkLabels", e.target.checked)}
+                />
+              </td>
+            </tr>
+
             <tr>
               <td>Node Size:</td>
               <td>
@@ -31,12 +51,13 @@ const GraphControlPanel = ({ onParamChange, visualParams, maxWeight }) => {
                 <input 
                   type="range" 
                   min="1" 
-                  max={maxWeight}
+                  max={visualParams.maxLinkWeight}
                   value={visualParams.weightThreshold}
                   onChange={(e) => onParamChange("weightThreshold", e.target.value)} 
                 />
               </td>
             </tr>
+
             <tr>
               <td>Charge Strength:</td>
               <td>

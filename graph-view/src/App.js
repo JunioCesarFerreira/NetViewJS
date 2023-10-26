@@ -7,13 +7,16 @@ import * as d3 from 'd3';
 const App = () => {
   const [nodes, setNodes] = useState([]);
   const [links, setLinks] = useState([]);
+
   const [visualParams, setVisualParams] = useState({
     nodeSize: 5,
     linkDistance: 50,
     chargeStrength: -10,
     collisionRadius: 10,
-    weightThreshold: 2,
+    weightThreshold: 0,
     centerForce: 50,
+    showNodeLabels: false,
+    showLinkLabels: false
   });
   const width = 800;
   const height = 600;
@@ -61,7 +64,7 @@ const App = () => {
       <input type="file" onChange={handleFileChange} accept=".json" />
       <div>
         <Graph nodes={nodes} links={links} width={width} height={height} visualParams={visualParams} />
-        <GraphControlPanel onParamChange={handleParamChange} visualParams={visualParams} maxWeight={visualParams.maxLinkWeight} />
+        <GraphControlPanel onParamChange={handleParamChange} visualParams={visualParams} />
       </div>
     </div>
   );
