@@ -20,8 +20,8 @@ body {
 
   .node {
     fill: #3498db;
-    stroke: #2980b9;
-    stroke-width: 1.5px;
+    stroke: #080808;
+    stroke-width: 1px;
     cursor: grab;
   }
   
@@ -31,7 +31,7 @@ body {
   
   .link {
     stroke: #FFFFFF;
-    stroke-opacity: 0.6;
+    stroke-opacity: 0.1;
   }
   
   .node-label,

@@ -12,7 +12,7 @@ const Graph = ({ nodes, links, width, height, visualParams }) => {
     const filteredLinks = links.filter(link => link.weight >= visualParams.weightThreshold);
 
     const simulation = d3.forceSimulation(nodes)
-      .alphaDecay(0.01)
+      .alphaDecay(0.1)
       .force("link", d3.forceLink(filteredLinks).id(d => d.id).distance(visualParams.linkDistance))
       .force("charge", d3.forceManyBody().strength(visualParams.chargeStrength))
       .force("center", d3.forceCenter(width / 2, height / 2))
@@ -102,7 +102,7 @@ const Graph = ({ nodes, links, width, height, visualParams }) => {
     };
   
     const dragEnd = (event, d) => {
-      if (!event.active) simulation.alphaTarget(0.01);
+      if (!event.active) simulation.alphaTarget(0.1);
       d.fx = null;
       d.fy = null;
     };
