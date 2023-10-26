@@ -1,7 +1,7 @@
 import networkx as nx
 import json
 
-G = nx.DiGraph()
+G = nx.Graph()
 
 filename = "celegansneural"
 
@@ -14,8 +14,7 @@ with open(filename, 'r') as file:
             capacity = int(capacity)
             G.add_edge(source, target, capacity=capacity)
             
-G.to_undirected()
-
+# Converte Rede Complexa para o formato JSON utilizado no graph-view.
 data = {
     "nodes": [{"id": n, "label": n} for n in G.nodes],
     "links": [{"source": u, "target": v, "weight": w['capacity']} for u, v, w in G.edges(data=True)]
