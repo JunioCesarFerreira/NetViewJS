@@ -7,6 +7,7 @@ const Graph = ({ nodes, links, width, height, visualParams }) => {
 
   useEffect(() => {
     const svg = d3.select(svgRef.current);
+    const markerWidth = 13
 
     // Filtrar links baseados no Weight Threshold antes de renderizar
     const filteredLinks = links.filter(link => link.weight >= visualParams.weightThreshold);
@@ -19,20 +20,25 @@ const Graph = ({ nodes, links, width, height, visualParams }) => {
       .force("collision", d3.forceCollide().radius(visualParams.collisionRadius));
 
     svg.selectAll('*').remove();
-
-	  // Adiciona um grupo para todos os elementos e aplica o zoom a este grupo.
-	  const g = svg.append("g")
-		  .attr("class", "everything");
-	
-	  // Criação de elementos gráficos dentro do grupo...
-	  const link = g.append("g")
-		  .attr("class", "links")
-		  .selectAll("line")
-		  .data(filteredLinks)
-		  .enter()
-		  .append("line")
-		  .attr("class", "link");
     
+    // Adiciona um grupo para todos os elementos e aplica o zoom a este grupo.
+    const g = svg.append("g")
+        .attr("class", "everything");
+    
+    // Definindo os marcadores de seta
+    g.append('defs').append('marker')
+      .attr('id', 'arrowhead')
+      .attr('viewBox', '-0 -5 10 10')
+      .attr('refX', 0)
+      .attr('refY', 0)
+      .attr('orient', 'auto')
+      .attr('markerWidth', markerWidth)
+      .attr('markerHeight', 13)
+      .attr('xoverflow', 'visible')
+      .append('svg:path')
+      .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+      .attr('fill', '#999'); // Cor da seta
+
     // Calcula a quantidade de links para cada nó usando os links filtrados
     let linkCount = {};
     filteredLinks.forEach(link => {
@@ -44,6 +50,17 @@ const Graph = ({ nodes, links, width, height, visualParams }) => {
     const nodeSizeScale = d3.scaleLinear()
       .domain([d3.min(Object.values(linkCount))-1, d3.max(Object.values(linkCount))])
       .range([visualParams.nodeSize, 3 * visualParams.nodeSize]);
+    
+
+	  // Criação de elementos gráficos dentro do grupo...
+	  const link = g.append("g")
+		  .attr("class", "links")
+		  .selectAll("line")
+		  .data(filteredLinks)
+		  .enter()
+		  .append("line")
+		  .attr("class", "link")
+      .attr('marker-end', 'url(#arrowhead)');
   
 	  const node = g.append("g")
 		  .attr("class", "nodes")
@@ -53,7 +70,7 @@ const Graph = ({ nodes, links, width, height, visualParams }) => {
 		  .append("circle")
 		  .attr("class", "node")
       .attr("r", d => nodeSizeScale(linkCount[d.id] || 0));
-	
+
     const nodeLabels = g.append("g")
 		  .attr("class", "node-labels")
 		  .selectAll("text")
@@ -120,8 +137,25 @@ const Graph = ({ nodes, links, width, height, visualParams }) => {
         link
           .attr("x1", d => d.source.x)
           .attr("y1", d => d.source.y)
-          .attr("x2", d => d.target.x)
-          .attr("y2", d => d.target.y);
+          .attr("x2", d => {
+            // Ajusta a posição x2 para que a seta pare antes de tocar o nó de destino
+            const dx = d.target.x - d.source.x;
+            const dy = d.target.y - d.source.y;
+            const gamma = Math.atan2(dy, dx); // Ângulo entre os nós
+            // Distância para subtrair do comprimento do link
+            const distanceToSubtract = markerWidth + nodeSizeScale(linkCount[d.target.id] || 0);
+            // Calcula a nova posição x2
+            return d.target.x - Math.cos(gamma) * distanceToSubtract;
+          })
+          .attr("y2", d => {
+            // Ajusta a posição y2 da mesma forma que a x2
+            const dx = d.target.x - d.source.x;
+            const dy = d.target.y - d.source.y;
+            const gamma = Math.atan2(dy, dx); // Ângulo entre os nós
+            const distanceToSubtract = markerWidth + nodeSizeScale(linkCount[d.target.id] || 0);
+            // Calcula a nova posição y2
+            return d.target.y - Math.sin(gamma) * distanceToSubtract;
+          });
     
         node
           .attr("cx", d => d.x)
