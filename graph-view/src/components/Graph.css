@@ -33,9 +33,14 @@ body {
     stroke: #FFFFFF;
     stroke-opacity: 0.1;
   }
+
+  .arrow {
+    fill: #FFFFFF;
+    fill-opacity: 0.1;
+  }
   
   .node-label,
   .link-label {
     font-size: 10px;
-    fill: #ecf0f13a; /* Cor do texto */
+    fill: #ecf0f1;
   }

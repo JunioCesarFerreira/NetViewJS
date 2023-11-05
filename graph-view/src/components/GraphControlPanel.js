@@ -23,6 +23,14 @@ const GraphControlPanel = ({ onParamChange, visualParams }) => {
                   onChange={(e) => onParamChange("showLinkLabels", e.target.checked)}
                 />
               </td>
+              <td>Show Link Arrows:</td>
+              <td>
+                <input 
+                  type="checkbox"
+                  checked={visualParams.showLinkArrows}
+                  onChange={(e) => onParamChange("showLinkArrows", e.target.checked)}
+                />
+              </td>
             </tr>
 
             <tr>

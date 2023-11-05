@@ -10,9 +10,9 @@ const App = () => {
 
   const [visualParams, setVisualParams] = useState({
     nodeSize: 5,
-    linkDistance: 50,
+    linkDistance: 150,
     chargeStrength: -10,
-    collisionRadius: 10,
+    collisionRadius: 30,
     weightThreshold: 0,
     centerForce: 50,
     showNodeLabels: false,

@@ -7,9 +7,11 @@ const Graph = ({ nodes, links, width, height, visualParams }) => {
 
   useEffect(() => {
     const svg = d3.select(svgRef.current);
-    const markerWidth = 13
 
-    // Filtrar links baseados no Weight Threshold antes de renderizar
+    // Valor fixo para setas
+    const markerWidth = 10
+
+    // Filtra links baseados no Weight Threshold antes de renderizar
     const filteredLinks = links.filter(link => link.weight >= visualParams.weightThreshold);
 
     const simulation = d3.forceSimulation(nodes)
@@ -24,20 +26,6 @@ const Graph = ({ nodes, links, width, height, visualParams }) => {
     // Adiciona um grupo para todos os elementos e aplica o zoom a este grupo.
     const g = svg.append("g")
         .attr("class", "everything");
-    
-    // Definindo os marcadores de seta
-    g.append('defs').append('marker')
-      .attr('id', 'arrowhead')
-      .attr('viewBox', '-0 -5 10 10')
-      .attr('refX', 0)
-      .attr('refY', 0)
-      .attr('orient', 'auto')
-      .attr('markerWidth', markerWidth)
-      .attr('markerHeight', 13)
-      .attr('xoverflow', 'visible')
-      .append('svg:path')
-      .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
-      .attr('fill', '#999'); // Cor da seta
 
     // Calcula a quantidade de links para cada nó usando os links filtrados
     let linkCount = {};
@@ -46,7 +34,7 @@ const Graph = ({ nodes, links, width, height, visualParams }) => {
       linkCount[link.target.id] = (linkCount[link.target.id] || 0) + 1;
     });
   
-    // Mapeia essa quantidade para um tamanho de nó desejado e use visualParams.nodeSize como multiplicador
+    // Mapeia os tamanhos proporcionais para cada node
     const nodeSizeScale = d3.scaleLinear()
       .domain([d3.min(Object.values(linkCount))-1, d3.max(Object.values(linkCount))])
       .range([visualParams.nodeSize, 3 * visualParams.nodeSize]);
@@ -54,25 +42,36 @@ const Graph = ({ nodes, links, width, height, visualParams }) => {
 
 	  // Criação de elementos gráficos dentro do grupo...
 	  const link = g.append("g")
-		  .attr("class", "links")
+		  .attr("class", "link")
 		  .selectAll("line")
 		  .data(filteredLinks)
 		  .enter()
 		  .append("line")
-		  .attr("class", "link")
       .attr('marker-end', 'url(#arrowhead)');
-  
-	  const node = g.append("g")
-		  .attr("class", "nodes")
-		  .selectAll("circle")
-		  .data(nodes)
-		  .enter()
-		  .append("circle")
-		  .attr("class", "node")
+
+    const node = g.append("g")
+      .attr("class", "node")
+      .selectAll("circle")
+      .data(nodes)
+      .enter()
+      .append("circle")
       .attr("r", d => nodeSizeScale(linkCount[d.id] || 0));
+    
+    const linkArrows = g.append('defs').append('marker')
+      .attr("class", "arrow")
+      .attr('id', 'arrowhead')
+      .attr('viewBox', '-0 -5 10 10')
+      .attr('refX', 0)
+      .attr('refY', 0)
+      .attr('orient', 'auto')
+      .attr('markerWidth', markerWidth)
+      .attr('markerHeight', markerWidth)
+      .attr('xoverflow', 'visible')
+      .append('svg:path')
+      .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
 
     const nodeLabels = g.append("g")
-		  .attr("class", "node-labels")
+		  .attr("class", "node-label")
 		  .selectAll("text")
 		  .data(nodes)
 		  .enter()
@@ -81,11 +80,9 @@ const Graph = ({ nodes, links, width, height, visualParams }) => {
 		  .attr("y", d => d.y)
 		  .text(d => d.label)
 		  .attr("dy", "-1em")
-      .attr("fill", "#ecf0f1")  // Cor do texto
-      .style("font-size", "10px");  // Tamanho do texto
 	
     const linkLabels = g.append("g")
-		  .attr("class", "link-labels")
+		  .attr("class", "link-label")
 		  .selectAll("text")
 		  .data(filteredLinks)
 		  .enter()
@@ -94,14 +91,12 @@ const Graph = ({ nodes, links, width, height, visualParams }) => {
 		  .attr("y", d => (d.source.y + d.target.y) / 2)
 		  .text(d => d.weight.toString())
 		  .attr("dy", "-0.5em")
-      .attr("fill", "#ecf0f1")  // Cor do texto
-      .style("font-size", "10px");  // Tamanho do texto
     
     // Adiciona comportamento de zoom ao SVG.
     const zoom = d3.zoom()
       .scaleExtent([0.1, 4])
       .on("zoom", (event) => {
-        g.attr("transform", event.transform); // Aplica o zoom ao grupo principal.
+        g.attr("transform", event.transform);
       });
 
     svg.call(zoom);
@@ -124,7 +119,7 @@ const Graph = ({ nodes, links, width, height, visualParams }) => {
       d.fy = null;
     };
   
-    // Aplicando o drag aos nós
+    // Aplicando o drag aos nodes
     const drag = d3.drag()
       .on("start", dragStart)
       .on("drag", dragged)
@@ -132,7 +127,7 @@ const Graph = ({ nodes, links, width, height, visualParams }) => {
   
     node.call(drag);
   
-    // Atualização da posição dos nós e arestas durante a simulação
+    // Atualização da posição dos nodes e links durante a simulação
     simulation.on("tick", () => {
         link
           .attr("x1", d => d.source.x)
@@ -143,7 +138,7 @@ const Graph = ({ nodes, links, width, height, visualParams }) => {
             const dy = d.target.y - d.source.y;
             const gamma = Math.atan2(dy, dx); // Ângulo entre os nós
             // Distância para subtrair do comprimento do link
-            const distanceToSubtract = markerWidth + nodeSizeScale(linkCount[d.target.id] || 0);
+            const distanceToSubtract = (visualParams.showLinkArrows ? markerWidth : 0) + nodeSizeScale(linkCount[d.target.id] || 0);
             // Calcula a nova posição x2
             return d.target.x - Math.cos(gamma) * distanceToSubtract;
           })
@@ -152,7 +147,7 @@ const Graph = ({ nodes, links, width, height, visualParams }) => {
             const dx = d.target.x - d.source.x;
             const dy = d.target.y - d.source.y;
             const gamma = Math.atan2(dy, dx); // Ângulo entre os nós
-            const distanceToSubtract = markerWidth + nodeSizeScale(linkCount[d.target.id] || 0);
+            const distanceToSubtract = (visualParams.showLinkArrows ? markerWidth : 0) + nodeSizeScale(linkCount[d.target.id] || 0);
             // Calcula a nova posição y2
             return d.target.y - Math.sin(gamma) * distanceToSubtract;
           });
@@ -161,17 +156,18 @@ const Graph = ({ nodes, links, width, height, visualParams }) => {
           .attr("cx", d => d.x)
           .attr("cy", d => d.y);
           
-        // Atualizando a posição dos rótulos dos nós
+        // Atualizando a posição dos rótulos dos nodes
         nodeLabels
           .attr("x", d => d.x)
           .attr("y", d => d.y);
         nodeLabels.attr('visibility', visualParams.showNodeLabels ? 'visible' : 'hidden');
     
-        // Atualizando a posição dos rótulos das arestas
+        // Atualizando a posição dos rótulos dos links
         linkLabels
           .attr("x", d => (d.source.x + d.target.x) / 2)
           .attr("y", d => (d.source.y + d.target.y) / 2);
         linkLabels.attr('visibility', visualParams.showLinkLabels ? 'visible' : 'hidden');
+        linkArrows.attr('visibility', visualParams.showLinkArrows ? 'visible' : 'hidden');
     });
   }, [nodes, links, width, height, visualParams]);
 
