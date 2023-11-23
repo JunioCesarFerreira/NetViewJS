@@ -19,7 +19,7 @@ const App = () => {
     showLinkLabels: false
   });
   const width = 800;
-  const height = 600;
+  const height = 450;
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -61,7 +61,9 @@ const App = () => {
   return (
     <div className="graph-container">
       <h1>Network Graph</h1>
-      <input type="file" onChange={handleFileChange} accept=".json" />
+      <div>
+        <input type="file" onChange={handleFileChange} accept=".json" />
+      </div>
       <div>
         <Graph nodes={nodes} links={links} width={width} height={height} visualParams={visualParams} />
         <GraphControlPanel onParamChange={handleParamChange} visualParams={visualParams} />
