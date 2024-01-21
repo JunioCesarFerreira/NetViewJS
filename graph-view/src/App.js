@@ -18,7 +18,7 @@ const App = () => {
     showNodeLabels: false,
     showLinkLabels: false
   });
-  const width = 800;
+  const width = 850;
   const height = 450;
 
   const handleFileChange = (event) => {
