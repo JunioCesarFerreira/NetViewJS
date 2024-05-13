@@ -46,7 +46,7 @@ npm install
 npm start
 ```
 
-A aplicação estará rodando no endereço `http://localhost:3000`.
+A aplicação ficará disponível no endereço `http://localhost:3000`.
 
 ## Uso
 
