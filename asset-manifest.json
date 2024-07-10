@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/NetViewJS/static/css/main.3890e9db.css",
+    "main.js": "/NetViewJS/static/js/main.ec129244.js",
+    "static/js/787.ae548b4a.chunk.js": "/NetViewJS/static/js/787.ae548b4a.chunk.js",
+    "index.html": "/NetViewJS/index.html",
+    "main.3890e9db.css.map": "/NetViewJS/static/css/main.3890e9db.css.map",
+    "main.ec129244.js.map": "/NetViewJS/static/js/main.ec129244.js.map",
+    "787.ae548b4a.chunk.js.map": "/NetViewJS/static/js/787.ae548b4a.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3890e9db.css",
+    "static/js/main.ec129244.js"
+  ]
+}
