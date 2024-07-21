@@ -39,7 +39,7 @@ git clone [https://github.com/JunioCesarFerreira/NetViewJS]
 2. Navigate to the project folder and install the dependencies:
 
 ```
-cd NetViewJS
+cd NetViewJS/graph-view
 npm install
 ```
 
@@ -58,6 +58,24 @@ The application will be available at `http://localhost:3000`.
 3. Visualize the loaded graph in the interface.
 
 ![NetViewJS Screenshot](./images/print.gif)
+
+## Using the Dockerfile
+
+You can also use Docker to build and run the application. Follow the steps below:
+
+1. Build the Docker image:
+
+```
+docker build -t netviewjs .
+```
+
+2. Run the Docker container:
+
+```
+docker run -p 80:80 netviewjs
+```
+
+The application will be available at `http://localhost`.
 
 ## Contributions
 

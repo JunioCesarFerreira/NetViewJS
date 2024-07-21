@@ -8,7 +8,6 @@
 
 [**Disponível no Github.IO**](https://juniocesarferreira.github.io/NetViewJS/)
 
-
 ## Características
 
 - Carregue e visualize grafos a partir de arquivos JSON.
@@ -29,7 +28,6 @@
 }
 ```
 
-
 ## Instalação
 
 1. Clone o repositório:
@@ -41,7 +39,7 @@ git clone [https://github.com/JunioCesarFerreira/NetViewJS]
 2. Navegue até a pasta do projeto e instale as dependências:
 
 ```
-cd NetViewJS
+cd NetViewJS/graph-view
 npm install
 ```
 
@@ -60,6 +58,24 @@ A aplicação ficará disponível no endereço `http://localhost:3000`.
 3. Visualize o grafo carregado na interface.
 
 ![NetViewJS Screenshot](./images/print.gif)
+
+## Usando o Dockerfile
+
+Você também pode usar o Docker para construir e executar a aplicação. Siga os passos abaixo:
+
+1. Construa a imagem Docker:
+
+```
+docker build -t netviewjs .
+```
+
+2. Execute o contêiner Docker:
+
+```
+docker run -p 80:80 netviewjs
+```
+
+A aplicação estará disponível no endereço `http://localhost`.
 
 ## Contribuições
 
