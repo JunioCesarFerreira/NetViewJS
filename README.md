@@ -1,5 +1,7 @@
 # NetViewJS
 
+🌍 *[Português](README.md) ∙ [English](README_en.md)*
+
 **NetViewJS** é uma aplicação React para visualização de grafos a partir de arquivos JSON.
 
 ![NetViewJS Screenshot](./images/print.png)
@@ -56,6 +58,8 @@ A aplicação ficará disponível no endereço `http://localhost:3000`.
 1. Abra a aplicação no navegador.
 2. Clique no botão de carregar arquivo e selecione o arquivo JSON com a estrutura do grafo.
 3. Visualize o grafo carregado na interface.
+
+![NetViewJS Screenshot](./images/print.gif)
 
 ## Contribuições
 
