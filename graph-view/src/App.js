@@ -2,7 +2,7 @@
 import React, { useState, useCallback } from 'react';
 import Graph from './components/Graph';
 import GraphControlPanel from './components/GraphControlPanel';
-import * as d3 from 'd3';
+import { processGraphFile } from './utils/processGraphFile';
 
 const App = () => {
   const [nodes, setNodes] = useState([]);
@@ -24,30 +24,13 @@ const App = () => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const graph = JSON.parse(e.target.result);
-        const processedNodes = graph.nodes.map(node => ({
-          id: node.id,
-          label: node.label
-        }));
-  
-        const processedLinks = graph.links.map(link => ({
-          source: link.source,
-          target: link.target,
-          weight: link.weight
-        }));
-  
-        console.log('Processed nodes: ', processedNodes); // Verifica os nós processados
-        console.log('Processed links: ', processedLinks); // Verifica os links processados
-  
+      processGraphFile(file).then(({ processedNodes, processedLinks, maxLinkWeight }) => {
         setNodes(processedNodes);
         setLinks(processedLinks);
-        
-        const maxLinkWeight = d3.max(processedLinks, link => link.weight);
         setVisualParams(prevParams => ({ ...prevParams, maxLinkWeight }));
-      };
-      reader.readAsText(file);
+      }).catch(err => {
+        console.error("Failed to process graph file:", err);
+      });
     }
   };
 
