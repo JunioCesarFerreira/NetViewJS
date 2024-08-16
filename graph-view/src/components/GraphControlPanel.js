@@ -5,7 +5,7 @@ const GraphControlPanel = ({ onParamChange, visualParams }) => {
       <div className="control-panel">
         <table>
           <tbody>
-            
+
             <tr>
               <td>Show Node Labels:</td>
               <td>

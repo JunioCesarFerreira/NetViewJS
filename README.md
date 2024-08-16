@@ -1,6 +1,6 @@
 # NetViewJS
 
-🌍 *[Português](README.md) ∙ [English](README_en.md)*
+🌍 *[**Português**](README.md) ∙ [English](README_en.md)*
 
 **NetViewJS** é uma aplicação React para visualização de grafos a partir de arquivos JSON.
 
